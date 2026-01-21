@@ -1,0 +1,46 @@
+# Node modules
+node_modules/
+
+# Build artifacts (blocks are built from src/)
+# blocks/ folder is generated, but we keep it in git for WordPress.org
+# Uncomment the line below if you want to exclude built blocks:
+# blocks/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor directories and files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# WordPress
+wp-config.php
+.htaccess
+
+# Environment files
+.env
+.env.local
+
+# Package manager
+package-lock.json
+yarn.lock
+
+# Temporary files
+*.tmp
+*.temp
+.cache/

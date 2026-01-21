@@ -1,0 +1,75 @@
+{
+  "apiVersion": 3,
+  "name": "we-taxonomy-navigation/taxonomy-list",
+  "title": "Taxonomy List",
+  "category": "widgets",
+  "icon": "list-view",
+  "description": "Display taxonomy terms as a list, dropdown, or filterable list.",
+  "textdomain": "we-taxonomy-navigation",
+  "attributes": {
+    "taxonomy": {
+      "type": "string",
+      "default": "category"
+    },
+    "displayStyle": {
+      "type": "string",
+      "default": "ul"
+    },
+    "orderBy": {
+      "type": "string",
+      "default": "name"
+    },
+    "order": {
+      "type": "string",
+      "default": "ASC"
+    },
+    "includeEmpty": {
+      "type": "boolean",
+      "default": false
+    },
+    "showCount": {
+      "type": "boolean",
+      "default": false
+    },
+    "showHierarchy": {
+      "type": "boolean",
+      "default": true
+    },
+    "maxDepth": {
+      "type": "number",
+      "default": 0
+    },
+    "dropdownTitle": {
+      "type": "string",
+      "default": ""
+    },
+    "dropdownLink": {
+      "type": "string",
+      "default": ""
+    },
+    "showDropdownButton": {
+      "type": "boolean",
+      "default": true
+    },
+    "enableFilter": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "supports": {
+    "anchor": true,
+    "align": true,
+    "color": {
+      "text": true,
+      "background": true,
+      "link": true
+    },
+    "spacing": {
+      "margin": true,
+      "padding": true
+    },
+    "typography": true
+  },
+  "editorScript": "file:./index.js",
+  "viewScript": "file:./view.js"
+}
