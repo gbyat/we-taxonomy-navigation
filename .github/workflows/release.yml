@@ -1,0 +1,122 @@
+name: Release Plugin
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build plugin
+        run: npm run build
+
+      - name: Generate POT file
+        run: npm run pot
+
+      - name: Debug - List files
+        run: |
+          echo "=== Current directory ==="
+          ls -la
+          echo "=== Blocks directory ==="
+          ls -la blocks/ || echo "Blocks directory not found"
+          echo "=== Includes directory ==="
+          ls -la includes/ || echo "Includes directory not found"
+          echo "=== Languages directory ==="
+          ls -la languages/ || echo "Languages directory not found"
+
+      - name: Create ZIP file
+        run: |
+          # Create a temporary directory for the plugin
+          mkdir -p temp
+
+          # Copy main PHP file
+          cp we-taxonomy-navigation.php temp/
+          echo "✅ Copied we-taxonomy-navigation.php"
+
+          # Copy blocks directory
+          if [ -d "blocks" ]; then
+            cp -r blocks temp/
+            echo "✅ Copied blocks/ (compiled block files)"
+          else
+            echo "ERROR: Blocks directory not found!"
+            exit 1
+          fi
+
+          # Copy includes directory
+          if [ -d "includes" ]; then
+            cp -r includes temp/
+            echo "✅ Copied includes/ (PHP classes)"
+          else
+            echo "ERROR: Includes directory not found!"
+            exit 1
+          fi
+
+          # Copy languages directory
+          if [ -d "languages" ]; then
+            cp -r languages temp/
+            echo "✅ Copied languages/ (language files)"
+          else
+            echo "⚠️  Languages directory not found (optional)"
+          fi
+
+          # Copy documentation files
+          for doc in README.md CHANGELOG.md LICENSE; do
+            if [ -f "$doc" ]; then
+              cp "$doc" temp/
+              echo "✅ Copied $doc"
+            else
+              echo "⚠️  Documentation not found: $doc"
+            fi
+          done
+
+          # Debug - List temp directory contents
+          echo "=== Temp directory contents ==="
+          ls -la temp/
+          echo "=== Temp/blocks contents ==="
+          ls -la temp/blocks/ || echo "Temp/blocks not found"
+          echo "=== Temp/includes contents ==="
+          ls -la temp/includes/ || echo "Temp/includes not found"
+          echo "=== Temp/languages contents ==="
+          ls -la temp/languages/ || echo "Temp/languages not found"
+
+          # Create ZIP file from temp directory contents
+          cd temp
+          zip -r ../we-taxonomy-navigation.zip .
+          cd ..
+
+          # Debug - Check ZIP contents
+          echo "=== ZIP file contents ==="
+          unzip -l we-taxonomy-navigation.zip | head -20
+          echo "..."
+          unzip -l we-taxonomy-navigation.zip | tail -10
+
+          echo "✅ ZIP file created with only production files"
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: we-taxonomy-navigation.zip
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+          name: "Release ${{ github.ref_name }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

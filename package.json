@@ -1,6 +1,6 @@
 {
   "name": "we-taxonomy-navigation",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Taxonomy list blocks and navigation variation.",
   "author": "webentwicklerin, Gabriele Laesser",
   "license": "GPL-2.0-or-later",
@@ -8,9 +8,16 @@
     "build": "node scripts/build.js",
     "start": "node scripts/build.js --watch",
     "lint": "wp-scripts lint-js",
-    "format": "wp-scripts format-js"
+    "format": "wp-scripts format-js",
+    "pot": "node scripts/generate-pot.js",
+    "release": "node scripts/release.js",
+    "release:patch": "node scripts/release.js patch",
+    "release:minor": "node scripts/release.js minor",
+    "release:major": "node scripts/release.js major",
+    "sync-version": "node scripts/sync-version.js"
   },
   "devDependencies": {
-    "@wordpress/scripts": "^27.0.0"
+    "@wordpress/scripts": "^27.0.0",
+    "wp-pot": "^1.9.9"
   }
 }

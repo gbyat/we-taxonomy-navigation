@@ -40,9 +40,9 @@ final class Plugin
      */
     private function includes()
     {
-        require_once PLUGIN_PATH . 'includes/class-taxonomy-list-block.php';
-        require_once PLUGIN_PATH . 'includes/class-navigation-renderer.php';
-        require_once PLUGIN_PATH . 'includes/class-taxonomy-navigation-block.php';
+        require_once WE_TAXONOMY_NAV_PLUGIN_DIR . 'includes/class-taxonomy-list-block.php';
+        require_once WE_TAXONOMY_NAV_PLUGIN_DIR . 'includes/class-navigation-renderer.php';
+        require_once WE_TAXONOMY_NAV_PLUGIN_DIR . 'includes/class-taxonomy-navigation-block.php';
     }
 
     /**
@@ -80,7 +80,7 @@ final class Plugin
      */
     public function load_textdomain()
     {
-        load_plugin_textdomain('we-taxonomy-navigation', false, dirname(plugin_basename(PLUGIN_FILE)) . '/languages');
+        load_plugin_textdomain('we-taxonomy-navigation', false, dirname(plugin_basename(WE_TAXONOMY_NAV_PLUGIN_FILE)) . '/languages');
     }
 
     /**

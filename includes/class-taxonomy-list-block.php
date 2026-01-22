@@ -16,7 +16,7 @@ final class Taxonomy_List_Block
     public static function register()
     {
         register_block_type_from_metadata(
-            PLUGIN_PATH . 'blocks/taxonomy-list',
+            WE_TAXONOMY_NAV_PLUGIN_DIR . 'blocks/taxonomy-list',
             array(
                 'render_callback' => array(__CLASS__, 'render'),
             )
