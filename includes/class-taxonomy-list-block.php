@@ -195,7 +195,7 @@ final class Taxonomy_List_Block
         $button = '';
         if ($show_button) {
             $button = sprintf(
-                '<button type="button" class="we-taxonomy-select-button">%s</button>',
+                '<button type="button" class="wp-element-button we-taxonomy-select-button">%s</button>',
                 esc_html__('Show selection', 'we-taxonomy-navigation')
             );
         }

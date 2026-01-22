@@ -35,11 +35,20 @@ final class Navigation_Renderer
             'hide_empty' => $include_empty ? 0 : 1,
             'orderby'    => $order_by,
             'order'      => $order,
+            // Force fresh data - bypass WordPress term cache
+            'update_term_meta_cache' => false,
+            'cache_results' => false,
         );
 
         $terms = get_terms($args);
         if (is_wp_error($terms) || empty($terms)) {
             return array();
+        }
+
+        // Debug: Log loaded terms
+        error_log('WE Taxonomy Nav: Loaded ' . count($terms) . ' terms:');
+        foreach ($terms as $term) {
+            error_log('  - Term ID ' . $term->term_id . ': ' . $term->name);
         }
 
         if (! $hierarchy) {
@@ -113,12 +122,18 @@ final class Navigation_Renderer
             if (0 !== $max_depth && $level >= $max_depth) {
                 continue;
             }
+
+            // Check if term has children
             $children = self::build_links_from_map($taxonomy, $map, $term->term_id, $level + 1, $max_depth);
-            $block    = self::build_link_block($term);
+
             if (! empty($children)) {
-                $block['innerBlocks']  = $children;
-                $block['innerContent'] = array_fill(0, count($children) + 1, '');
+                // Term has children - create a submenu block
+                $block = self::build_submenu_block($term, $children);
+            } else {
+                // Term has no children - create a simple link
+                $block = self::build_link_block($term);
             }
+
             $blocks[] = $block;
         }
 
@@ -146,10 +161,43 @@ final class Navigation_Renderer
                 'kind'  => 'taxonomy',
                 'type'  => $term->taxonomy,
                 'id'    => $term->term_id,
+                // Mark as taxonomy-generated for editor identification
+                'className' => 'taxonomy-generated-link',
             ),
             'innerBlocks'  => array(),
             'innerHTML'    => '',
             'innerContent' => array(),
+        );
+    }
+
+    /**
+     * Build a navigation-submenu block for a term with children.
+     *
+     * @param \WP_Term $term Term object.
+     * @param array    $children Child link blocks.
+     * @return array
+     */
+    private static function build_submenu_block($term, $children)
+    {
+        $url = get_term_link($term);
+        if (is_wp_error($url)) {
+            $url = '';
+        }
+
+        return array(
+            'blockName'    => 'core/navigation-submenu',
+            'attrs'        => array(
+                'label' => $term->name,
+                'url'   => $url,
+                'kind'  => 'taxonomy',
+                'type'  => $term->taxonomy,
+                'id'    => $term->term_id,
+                // Mark as taxonomy-generated for editor identification
+                'className' => 'taxonomy-generated-submenu',
+            ),
+            'innerBlocks'  => $children,
+            'innerHTML'    => '',
+            'innerContent' => array_fill(0, count($children), null),
         );
     }
 
