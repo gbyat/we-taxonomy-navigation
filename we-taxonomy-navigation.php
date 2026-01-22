@@ -7,7 +7,7 @@ namespace Webentwicklerin\TaxonomyNavigation {
      * Plugin Name: WE Taxonomy Navigation
      * Plugin URI: https://github.com/gbyat/we-taxonomy-navigation
      * Description: Provides taxonomy list blocks and a navigation variation that auto-populates terms.
-     * Version: 0.1.3
+     * Version: 0.1.4
      * Requires at least: 6.0
      * Tested up to: 6.4
      * Author: webentwicklerin, Gabriele Laesser
@@ -24,7 +24,7 @@ namespace Webentwicklerin\TaxonomyNavigation {
     }
 
     // Plugin constants (defined in global scope despite namespace)
-    define('WE_TAXONOMY_NAV_VERSION', '0.1.3');
+    define('WE_TAXONOMY_NAV_VERSION', '0.1.4');
     define('WE_TAXONOMY_NAV_PLUGIN_FILE', __FILE__);
     define('WE_TAXONOMY_NAV_PLUGIN_DIR', plugin_dir_path(__FILE__));
     define('WE_TAXONOMY_NAV_PLUGIN_URL', plugin_dir_url(__FILE__));

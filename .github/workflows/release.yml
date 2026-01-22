@@ -110,6 +110,20 @@ jobs:
 
           echo "✅ ZIP file created with only production files"
 
+      - name: Verify ZIP file exists
+        run: |
+          if [ ! -f "we-taxonomy-navigation.zip" ]; then
+            echo "❌ ERROR: ZIP file not found!"
+            echo "Current directory:"
+            pwd
+            echo "Files in current directory:"
+            ls -la
+            exit 1
+          fi
+          echo "✅ ZIP file exists: we-taxonomy-navigation.zip"
+          echo "ZIP file size:"
+          ls -lh we-taxonomy-navigation.zip
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
