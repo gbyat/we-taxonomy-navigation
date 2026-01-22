@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.3] - 2026-01-22
+
+- Update stable tag in README.md to version 0.1.2
+- Update sync-version script to modify README.md stable tag during version sync
+
+
 ## [0.1.2] - 2026-01-22
 
 - Delete navigation-taxonomies-plugin-prompt.md
@@ -32,3 +38,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GitHub update system integration
 [0.1.1]: https://github.com/gbyat/we-taxonomy-navigation/releases/tag/v0.1.1
 [0.1.2]: https://github.com/gbyat/we-taxonomy-navigation/releases/tag/v0.1.2
+[0.1.3]: https://github.com/gbyat/we-taxonomy-navigation/releases/tag/v0.1.3
