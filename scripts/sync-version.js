@@ -29,6 +29,21 @@ pluginContent = pluginContent.replace(
 fs.writeFileSync(pluginPath, pluginContent);
 console.log(`✅ Updated we-taxonomy-navigation.php`);
 
+// Update README.md stable tag
+const readmePath = path.join(__dirname, '..', 'README.md');
+if (fs.existsSync(readmePath)) {
+    let readmeContent = fs.readFileSync(readmePath, 'utf8');
+
+    // Update Stable tag line (supports both **Stable tag:** and Stable tag: formats)
+    readmeContent = readmeContent.replace(
+        /(\*\*Stable tag:\*\*|Stable tag:)\s*\d+\.\d+\.\d+/,
+        `$1 ${version}`
+    );
+
+    fs.writeFileSync(readmePath, readmeContent);
+    console.log(`✅ Updated README.md stable tag`);
+}
+
 // Update CHANGELOG.md
 const changelogPath = path.join(__dirname, '..', 'CHANGELOG.md');
 if (!fs.existsSync(changelogPath)) {
