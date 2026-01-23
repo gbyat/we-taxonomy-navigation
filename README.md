@@ -1,19 +1,20 @@
 # WE Taxonomy Navigation
 
-**Contributors:** gbyat  
+**Contributors:** webentwicklerin
 **Tags:** navigation, taxonomy, blocks, gutenberg, menu  
 **Requires at least:** 6.0  
-**Tested up to:** 6.4  
+**Tested up to:** 6.9
 **Requires PHP:** 7.4  
 **Stable tag:** 0.1.5  
 **License:** GPLv2 or later  
 **License URI:** https://www.gnu.org/licenses/gpl-2.0.html
 
-A WordPress plugin that provides Gutenberg blocks for displaying taxonomy terms as navigation menus and lists, with automatic updates when terms are modified.
+WE Taxonomy Navigation adds two powerful Gutenberg blocks to WordPress
 
 ## Description
 
-WE Taxonomy Navigation adds two powerful Gutenberg blocks to WordPress:
+A WordPress plugin that provides Gutenberg blocks for displaying taxonomy terms as navigation menus and lists, with automatic updates when terms are modified.
+
 
 1. **Taxonomy List Block** - Display taxonomy terms as dropdowns, filterable lists, or ordered/unordered lists
 2. **Taxonomy Navigation Block** - A full-featured navigation block that automatically populates with taxonomy terms, mimicking the native WordPress Navigation block with all its styling options (colors, overlay, typography, etc.)
