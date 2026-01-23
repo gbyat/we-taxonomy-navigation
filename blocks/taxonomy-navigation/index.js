@@ -85,21 +85,17 @@
                 fetchTaxonomyTerms(attributes.taxonomy, attributes).then((links) => {
                     const currentBlock = getBlock(clientId);
                     if (!currentBlock || !currentBlock.innerBlocks || currentBlock.innerBlocks.length === 0) {
-                        console.log('No inner blocks yet, skipping update');
                         return;
                     }
                     const navBlock = currentBlock.innerBlocks[0];
 
                     if (!navBlock || navBlock.name !== 'core/navigation') {
-                        console.log('Navigation block not found, skipping update');
                         return;
                     }
 
                     // Get existing blocks, filter out taxonomy-generated ones
                     const existingBlocks = navBlock.innerBlocks || [];
-                    console.log('Existing blocks in navigation:', existingBlocks.length);
                     existingBlocks.forEach((block, idx) => {
-                        console.log(`  Block ${idx}: ${block.name}, className: ${block.attributes.className || '(none)'}`);
                     });
 
                     const userBlocks = existingBlocks.filter((block) => {
@@ -115,9 +111,7 @@
                         return !isTaxonomyGenerated && !isTaxonomyLink;
                     });
 
-                    console.log('User blocks to keep:', userBlocks.length);
                     userBlocks.forEach((block) => {
-                        console.log('  Keeping:', block.name);
                     });
 
                     // Create new taxonomy blocks (supporting submenus)
@@ -130,7 +124,6 @@
 
                     // Always clear ref attribute to prevent using synced navigation
                     if (navBlock.attributes.ref !== undefined) {
-                        console.log('Removing ref attribute from navigation block');
                         wp.data.dispatch('core/block-editor').updateBlockAttributes(navBlock.clientId, { ref: undefined });
                     }
                 });

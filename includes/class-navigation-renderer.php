@@ -45,12 +45,6 @@ final class Navigation_Renderer
             return array();
         }
 
-        // Debug: Log loaded terms
-        error_log('WE Taxonomy Nav: Loaded ' . count($terms) . ' terms:');
-        foreach ($terms as $term) {
-            error_log('  - Term ID ' . $term->term_id . ': ' . $term->name);
-        }
-
         if (! $hierarchy) {
             return self::build_flat_links($terms, $max_depth);
         }

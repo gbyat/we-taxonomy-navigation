@@ -146,8 +146,6 @@ final class Plugin
      */
     public function clear_term_cache($term_id, $tt_id, $taxonomy)
     {
-        error_log('WE Taxonomy Nav: Clearing cache for term ' . $term_id . ' in taxonomy ' . $taxonomy);
-
         // Clear all term caches for this taxonomy
         wp_cache_delete('last_changed', 'terms');
         clean_term_cache($term_id, $taxonomy);
@@ -168,8 +166,6 @@ final class Plugin
 
         // Find all posts/pages using taxonomy navigation blocks and mark them for update
         $this->update_posts_with_taxonomy_blocks();
-
-        error_log('WE Taxonomy Nav: Cache cleared successfully');
     }
 
     /**
@@ -193,8 +189,6 @@ final class Plugin
             return;
         }
 
-        error_log('WE Taxonomy Nav: Updating ' . count($posts) . ' posts with taxonomy blocks');
-
         foreach ($posts as $post) {
             $post_obj = get_post($post->ID);
 
@@ -203,14 +197,10 @@ final class Plugin
                 // Parse blocks
                 $blocks = parse_blocks($post_obj->post_content);
 
-                error_log('WE Taxonomy Nav: Parsed ' . count($blocks) . ' top-level blocks from template: ' . $post_obj->post_name);
-                $this->debug_block_structure($blocks, 0);
-
                 // Regenerate taxonomy navigation blocks with fresh data
                 $updated = $this->regenerate_taxonomy_blocks($blocks);
 
                 if ($updated) {
-                    error_log('WE Taxonomy Nav: ✅ Blocks were updated, serializing and saving...');
                     // Serialize blocks back to content
                     $new_content = serialize_blocks($blocks);
 
@@ -226,8 +216,6 @@ final class Plugin
                         array('%s', '%s', '%s'),
                         array('%d')
                     );
-
-                    error_log('WE Taxonomy Nav: ✅ Regenerated and saved template: ' . $post_obj->post_name);
 
                     // AGGRESSIVE cache clearing for template parts
                     $template_part_name = str_replace('wp_template_part//', '', $post_obj->post_name);
@@ -250,10 +238,6 @@ final class Plugin
 
                     // Force WordPress to reload the template part
                     clean_post_cache($post_obj->ID);
-
-                    error_log('WE Taxonomy Nav: Cleared all caches for template part: ' . $template_part_name);
-                } else {
-                    error_log('WE Taxonomy Nav: ❌ No blocks were updated (block not found?)');
                 }
             } else {
                 // For regular posts/pages, just update modified time
@@ -276,35 +260,13 @@ final class Plugin
 
         // If object cache is active, flush it completely
         if (wp_using_ext_object_cache()) {
-            error_log('WE Taxonomy Nav: Object cache detected, flushing...');
             wp_cache_flush();
         }
 
         // Force update option to bust any persistent caches
         update_option('we_taxonomy_nav_template_cache_buster', time());
-
-        error_log('WE Taxonomy Nav: All caches cleared, template cache buster updated');
     }
 
-    /**
-     * Debug: Log block structure recursively.
-     *
-     * @param array $blocks Block array.
-     * @param int   $depth Current depth.
-     * @return void
-     */
-    private function debug_block_structure($blocks, $depth = 0)
-    {
-        $indent = str_repeat('  ', $depth);
-        foreach ($blocks as $block) {
-            $block_name = $block['blockName'] ?? '(no name)';
-            error_log($indent . '- Block: ' . $block_name);
-
-            if (isset($block['innerBlocks']) && is_array($block['innerBlocks']) && !empty($block['innerBlocks'])) {
-                $this->debug_block_structure($block['innerBlocks'], $depth + 1);
-            }
-        }
-    }
 
     /**
      * Recursively regenerate taxonomy navigation blocks with fresh data.
@@ -321,7 +283,6 @@ final class Plugin
 
             // Check if this is a taxonomy navigation block
             if (isset($block['blockName']) && $block['blockName'] === 'we-taxonomy-navigation/taxonomy-navigation') {
-                error_log('WE Taxonomy Nav: ✅ Found taxonomy navigation block, regenerating...');
 
                 // Get block attributes
                 $attrs = $block['attrs'] ?? array();
@@ -334,7 +295,6 @@ final class Plugin
                 if (isset($block['innerBlocks']) && is_array($block['innerBlocks'])) {
                     foreach ($block['innerBlocks'] as &$inner_block) {
                         if (isset($inner_block['blockName']) && $inner_block['blockName'] === 'core/navigation') {
-                            error_log('WE Taxonomy Nav: Found inner navigation block, updating links...');
 
                             // Get existing blocks, keep non-taxonomy ones
                             $existing = $inner_block['innerBlocks'] ?? array();
@@ -350,7 +310,6 @@ final class Plugin
                             // Combine: fresh taxonomy links + user blocks
                             $inner_block['innerBlocks'] = array_merge($fresh_links, $user_blocks);
 
-                            error_log('WE Taxonomy Nav: Updated with ' . count($fresh_links) . ' taxonomy links + ' . count($user_blocks) . ' user blocks');
                             $updated = true;
                         }
                     }

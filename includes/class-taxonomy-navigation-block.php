@@ -35,8 +35,6 @@ final class Taxonomy_Navigation_Block
      */
     public static function render($attributes, $content, $block)
     {
-        error_log('WE Taxonomy Nav: Taxonomy Navigation Block render called');
-
         // Force cache invalidation by including cache buster
         $cache_buster = get_option('we_taxonomy_nav_cache_buster', 0);
 
