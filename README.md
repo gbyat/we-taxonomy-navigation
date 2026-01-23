@@ -1,6 +1,6 @@
 # WE Taxonomy Navigation
 
-**Contributors:** webentwicklerin
+**Contributors:** webentwicklerin  
 **Tags:** navigation, taxonomy, blocks, gutenberg, menu  
 **Requires at least:** 6.0  
 **Tested up to:** 6.9  
