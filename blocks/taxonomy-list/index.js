@@ -101,6 +101,12 @@
                             min: 0,
                             max: 10,
                             onChange: (value) => setAttributes({ maxDepth: value }),
+                        }),
+                        el(TextControl, {
+                            label: __('Exclude term IDs', 'we-taxonomy-navigation'),
+                            help: __('Comma-separated term IDs to exclude (e.g. 3,14,27).', 'we-taxonomy-navigation'),
+                            value: attributes.exclude,
+                            onChange: (value) => setAttributes({ exclude: value }),
                         })
                     ),
                     el(

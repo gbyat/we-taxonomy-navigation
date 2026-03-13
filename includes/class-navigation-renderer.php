@@ -29,12 +29,14 @@ final class Navigation_Renderer
         $order         = isset($attrs['order']) && 'DESC' === strtoupper($attrs['order']) ? 'DESC' : 'ASC';
         $hierarchy     = ! empty($attrs['showHierarchy']) && is_taxonomy_hierarchical($taxonomy);
         $max_depth     = isset($attrs['maxDepth']) ? absint($attrs['maxDepth']) : 0;
+        $exclude       = array_filter( array_map( 'absint', explode( ',', $attrs['exclude'] ?? '' ) ) );
 
         $args = array(
             'taxonomy'   => $taxonomy,
             'hide_empty' => $include_empty ? 0 : 1,
             'orderby'    => $order_by,
             'order'      => $order,
+            'exclude'    => $exclude,
             // Force fresh data - bypass WordPress term cache
             'update_term_meta_cache' => false,
             'cache_results' => false,

@@ -123,6 +123,7 @@ final class Plugin
             'order'         => $request->get_param('order') ?: 'ASC',
             'showHierarchy' => $request->get_param('showHierarchy') === '1',
             'maxDepth'      => absint($request->get_param('maxDepth')),
+            'exclude'       => $request->get_param('exclude') ?: '',
         );
 
         $links = Navigation_Renderer::build_links_for_attributes($taxonomy, $attributes);

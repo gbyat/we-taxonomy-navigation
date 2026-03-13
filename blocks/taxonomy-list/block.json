@@ -54,6 +54,10 @@
     "enableFilter": {
       "type": "boolean",
       "default": false
+    },
+    "exclude": {
+      "type": "string",
+      "default": ""
     }
   },
   "supports": {

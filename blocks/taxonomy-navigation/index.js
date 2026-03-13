@@ -2,7 +2,7 @@
     const { registerBlockType } = wp.blocks;
     const { __ } = wp.i18n;
     const { InspectorControls, useBlockProps, InnerBlocks } = wp.blockEditor;
-    const { PanelBody, SelectControl, ToggleControl, RangeControl } = wp.components;
+    const { PanelBody, SelectControl, ToggleControl, RangeControl, TextControl } = wp.components;
     const { useSelect, useDispatch } = wp.data;
     const { createElement: el, Fragment, useEffect } = wp.element;
 
@@ -29,7 +29,7 @@
 
     const fetchTaxonomyTerms = (taxonomy, attributes) => {
         return wp.apiFetch({
-            path: `/we-taxonomy-navigation/v1/terms?taxonomy=${taxonomy}&orderBy=${attributes.orderBy}&order=${attributes.order}&includeEmpty=${attributes.includeEmpty ? '1' : '0'}&showHierarchy=${attributes.showHierarchy ? '1' : '0'}&maxDepth=${attributes.maxDepth}`,
+            path: `/we-taxonomy-navigation/v1/terms?taxonomy=${taxonomy}&orderBy=${attributes.orderBy}&order=${attributes.order}&includeEmpty=${attributes.includeEmpty ? '1' : '0'}&showHierarchy=${attributes.showHierarchy ? '1' : '0'}&maxDepth=${attributes.maxDepth}&exclude=${encodeURIComponent(attributes.exclude || '')}`,
         });
     };
 
@@ -127,7 +127,7 @@
                         wp.data.dispatch('core/block-editor').updateBlockAttributes(navBlock.clientId, { ref: undefined });
                     }
                 });
-            }, [attributes.taxonomy, attributes.orderBy, attributes.order, attributes.includeEmpty, attributes.showHierarchy, attributes.maxDepth, clientId]);
+            }, [attributes.taxonomy, attributes.orderBy, attributes.order, attributes.includeEmpty, attributes.showHierarchy, attributes.maxDepth, attributes.exclude, clientId]);
 
             return el(
                 Fragment,
@@ -162,6 +162,12 @@
                             min: 0,
                             max: 10,
                             onChange: (value) => setAttributes({ maxDepth: value }),
+                        }),
+                        el(TextControl, {
+                            label: __('Exclude term IDs', 'we-taxonomy-navigation'),
+                            help: __('Comma-separated term IDs to exclude (e.g. 3,14,27).', 'we-taxonomy-navigation'),
+                            value: attributes.exclude,
+                            onChange: (value) => setAttributes({ exclude: value }),
                         })
                     ),
                     el(

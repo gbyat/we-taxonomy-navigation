@@ -46,6 +46,7 @@ final class Taxonomy_List_Block
                 'dropdownLink'   => '',
                 'showDropdownButton' => true,
                 'enableFilter'   => false,
+                'exclude'        => '',
             )
         );
 
@@ -55,12 +56,14 @@ final class Taxonomy_List_Block
 
         $taxonomy = $attributes['taxonomy'];
         $max_depth = absint($attributes['maxDepth']);
+        $exclude   = array_filter( array_map( 'absint', explode( ',', $attributes['exclude'] ?? '' ) ) );
 
         $args = array(
             'taxonomy'   => $taxonomy,
             'orderby'    => sanitize_key($attributes['orderBy']),
             'order'      => 'DESC' === strtoupper($attributes['order']) ? 'DESC' : 'ASC',
             'hide_empty' => empty($attributes['includeEmpty']),
+            'exclude'    => $exclude,
         );
 
         $terms = get_terms($args);
@@ -104,11 +107,10 @@ final class Taxonomy_List_Block
         $include_empty = ! empty($attributes['includeEmpty']);
         $order_by = sanitize_key($attributes['orderBy']);
         $order    = 'DESC' === strtoupper($attributes['order']) ? 'DESC' : 'ASC';
-        $show_button = isset($attributes['showDropdownButton']) ? (bool) $attributes['showDropdownButton'] : true;
-        $show_button = isset($attributes['showDropdownButton']) ? (bool) $attributes['showDropdownButton'] : true;
+        $exclude  = array_filter( array_map( 'absint', explode( ',', $attributes['exclude'] ?? '' ) ) );
 
         $output = $hierarchy
-            ? self::render_terms_hierarchical_list($taxonomy, $show_count, $tag, $max_depth, $include_empty, $order_by, $order)
+            ? self::render_terms_hierarchical_list($taxonomy, $show_count, $tag, $max_depth, $include_empty, $order_by, $order, $exclude)
             : self::render_terms_flat_list($terms, $show_count, $tag, $max_depth);
 
         return sprintf(
@@ -136,9 +138,10 @@ final class Taxonomy_List_Block
         $include_empty = ! empty($attributes['includeEmpty']);
         $order_by = sanitize_key($attributes['orderBy']);
         $order    = 'DESC' === strtoupper($attributes['order']) ? 'DESC' : 'ASC';
+        $exclude  = array_filter( array_map( 'absint', explode( ',', $attributes['exclude'] ?? '' ) ) );
 
         $list = $hierarchy
-            ? self::render_terms_hierarchical_list($taxonomy, $show_count, $tag, $max_depth, $include_empty, $order_by, $order)
+            ? self::render_terms_hierarchical_list($taxonomy, $show_count, $tag, $max_depth, $include_empty, $order_by, $order, $exclude)
             : self::render_terms_flat_list($terms, $show_count, $tag, $max_depth);
 
         $filter_label = esc_html__('Filter terms', 'we-taxonomy-navigation');
@@ -183,9 +186,10 @@ final class Taxonomy_List_Block
         $order_by = sanitize_key($attributes['orderBy']);
         $order    = 'DESC' === strtoupper($attributes['order']) ? 'DESC' : 'ASC';
         $show_button = isset($attributes['showDropdownButton']) ? (bool) $attributes['showDropdownButton'] : true;
+        $exclude  = array_filter( array_map( 'absint', explode( ',', $attributes['exclude'] ?? '' ) ) );
 
         $options = $hierarchy
-            ? self::render_terms_hierarchical_dropdown($taxonomy, $show_count, $max_depth, $include_empty, $order_by, $order)
+            ? self::render_terms_hierarchical_dropdown($taxonomy, $show_count, $max_depth, $include_empty, $order_by, $order, 0, 0, $exclude)
             : self::render_terms_flat_dropdown($terms, $show_count, $max_depth);
 
         $first_option = $link
@@ -226,7 +230,7 @@ final class Taxonomy_List_Block
      * @param int    $max_depth Max depth (0 = unlimited).
      * @return string
      */
-    private static function render_terms_hierarchical_list($taxonomy, $show_count, $tag, $max_depth, $include_empty, $order_by, $order)
+    private static function render_terms_hierarchical_list($taxonomy, $show_count, $tag, $max_depth, $include_empty, $order_by, $order, $exclude = array())
     {
         $args = array(
             'taxonomy'     => $taxonomy,
@@ -238,6 +242,7 @@ final class Taxonomy_List_Block
             'style'        => 'list',
             'orderby'      => $order_by,
             'order'        => $order,
+            'exclude'      => $exclude,
         );
 
         $list = wp_list_categories($args);
@@ -316,7 +321,7 @@ final class Taxonomy_List_Block
      * @param int    $level Current level.
      * @return string
      */
-    private static function render_terms_hierarchical_dropdown($taxonomy, $show_count, $max_depth, $include_empty, $order_by, $order, $parent = 0, $level = 0)
+    private static function render_terms_hierarchical_dropdown($taxonomy, $show_count, $max_depth, $include_empty, $order_by, $order, $parent = 0, $level = 0, $exclude = array())
     {
         $args = array(
             'taxonomy'   => $taxonomy,
@@ -324,6 +329,7 @@ final class Taxonomy_List_Block
             'parent'     => $parent,
             'orderby'    => $order_by,
             'order'      => $order,
+            'exclude'    => $exclude,
         );
 
         $terms = get_terms($args);
@@ -345,7 +351,7 @@ final class Taxonomy_List_Block
                 esc_html($term->name),
                 esc_html($count)
             );
-            $output .= self::render_terms_hierarchical_dropdown($taxonomy, $show_count, $max_depth, $include_empty, $order_by, $order, $term->term_id, $level + 1);
+            $output .= self::render_terms_hierarchical_dropdown($taxonomy, $show_count, $max_depth, $include_empty, $order_by, $order, $term->term_id, $level + 1, $exclude);
         }
 
         return $output;

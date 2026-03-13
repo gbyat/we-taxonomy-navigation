@@ -30,6 +30,10 @@
     "maxDepth": {
       "type": "number",
       "default": 0
+    },
+    "exclude": {
+      "type": "string",
+      "default": ""
     }
   },
   "supports": {
