@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.6] - 2026-03-13
+
+- Add 'exclude' attribute to taxonomy blocks for term ID filtering
+  - Introduced 'exclude' attribute in both taxonomy-list and taxonomy-navigation blocks to allow users to specify term IDs to exclude.
+  - Updated block.json files to define the new attribute.
+  - Enhanced index.js files to include a TextControl for user input of excluded term IDs.
+  - Modified API fetch calls to incorporate the 'exclude' parameter in requests.
+  - Adjusted rendering functions to respect the exclusion of specified term IDs.
+- Update README.md to include additional contributor information, tags, and specify the minimum and tested WordPress versions.
+- Update README.md to maintain consistency in formatting and ensure clarity in the tested WordPress version.
+- Update README.md to reflect new contributor and tested WordPress version; clarify plugin description.
+
+
 ## [0.1.5] - 2026-01-23
 
 - Refactor release workflow and clean up debug logs. Removed unnecessary debug commands from the release process and JavaScript files to streamline execution and improve performance. Updated error handling for missing directories in the release workflow.
@@ -51,3 +64,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.1.3]: https://github.com/gbyat/we-taxonomy-navigation/releases/tag/v0.1.3
 [0.1.4]: https://github.com/gbyat/we-taxonomy-navigation/releases/tag/v0.1.4
 [0.1.5]: https://github.com/gbyat/we-taxonomy-navigation/releases/tag/v0.1.5
+[0.1.6]: https://github.com/gbyat/we-taxonomy-navigation/releases/tag/v0.1.6
